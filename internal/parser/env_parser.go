@@ -95,3 +95,14 @@ func (e *EnvFile) ToMap() map[string]string {
 	}
 	return m
 }
+
+// Lookup returns the EnvEntry for the given key and a boolean indicating
+// whether the key was found in the file.
+func (e *EnvFile) Lookup(key string) (EnvEntry, bool) {
+	for _, entry := range e.Entries {
+		if entry.Key == key {
+			return entry, true
+		}
+	}
+	return EnvEntry{}, false
+}
