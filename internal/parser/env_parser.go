@@ -106,3 +106,12 @@ func (e *EnvFile) Lookup(key string) (EnvEntry, bool) {
 	}
 	return EnvEntry{}, false
 }
+
+// Keys returns a slice of all keys present in the EnvFile, in order.
+func (e *EnvFile) Keys() []string {
+	keys := make([]string, 0, len(e.Entries))
+	for _, entry := range e.Entries {
+		keys = append(keys, entry.Key)
+	}
+	return keys
+}
