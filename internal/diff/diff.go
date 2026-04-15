@@ -54,6 +54,15 @@ func (r *Result) Summary() string {
 	return sb.String()
 }
 
+// CountByType returns the number of changes for each ChangeType.
+func (r *Result) CountByType() map[ChangeType]int {
+	counts := make(map[ChangeType]int)
+	for _, c := range r.Changes {
+		counts[c.Type]++
+	}
+	return counts
+}
+
 // Compare computes the diff between two parsed env files.
 // base is the reference (e.g. .env.example), target is the file being compared.
 func Compare(base, target *parser.EnvFile) *Result {
