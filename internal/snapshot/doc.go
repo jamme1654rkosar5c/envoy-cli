@@ -7,6 +7,10 @@
 // where the timestamp is in RFC3339 format with colons replaced by hyphens for
 // filesystem compatibility.
 //
+// The Diff function compares two snapshots and returns a list of changes,
+// including added, removed, and modified keys. Modified entries include both
+// the old and new values to support auditing workflows.
+//
 // Usage:
 //
 //	// Save a snapshot
