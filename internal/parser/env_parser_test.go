@@ -69,6 +69,13 @@ func TestParseFile_InvalidLine(t *testing.T) {
 	}
 }
 
+func TestParseFile_NonExistentFile(t *testing.T) {
+	_, err := ParseFile("/nonexistent/path/to/file.env")
+	if err == nil {
+		t.Fatal("expected error for non-existent file, got nil")
+	}
+}
+
 func TestToMap(t *testing.T) {
 	path := writeTempEnv(t, "FOO=bar\nBAZ=qux\n")
 
