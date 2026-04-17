@@ -7,14 +7,15 @@ import (
 )
 
 // ValidationError describes a problem found in an env file.
-type ValidationError struct     int
+type ValidationError struct {
+	Line    int
 	Key     string
 	Message string
 }
 
 func (e ValidationError) Error() string {
 	if e.Line > 0 {
-		return fmt.Sprintf("line %d [.Line, e.Key, e.Message)
+		return fmt.Sprintf("line %d [%s]: %s", e.Line, e.Key, e.Message)
 	}
 	return fmt.Sprintf("[%s]: %s", e.Key, e.Message)
 }
@@ -28,7 +29,7 @@ func Validate(env *EnvFile) []ValidationError {
 
 	for _, entry := range env.Entries {
 		// Check key naming convention.
-		if !validKeyPattern.MatchString(entry.Key) {
+		if !validKey.MatchString(entry.Key) {
 			errs = append(errs, ValidationError{
 				Line:    entry.Line,
 				Key:     entry.Key,
