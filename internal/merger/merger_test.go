@@ -84,3 +84,33 @@ func TestMerge_EmptyOverride(t *testing.T) {
 		t.Errorf("expected 2 entries, got %d", len(res.File.Entries))
 	}
 }
+
+func TestMerge_MultipleConflicts(t *testing.T) {
+	base := makeFile("APP_ENV", "production", "DB_HOST", "localhost", "LOG_LEVEL", "info")
+	override := makeFile("APP_ENV", "staging", "DB_HOST", "remotehost", "LOG_LEVEL", "debug")
+
+	res, err := Merge(base, override, StrategyBase)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(res.Conflicts) != 3 {
+		t.Errorf("expected 3 conflicts, got %d", len(res.Conflicts))
+	}
+	// Base strategy: all original values should be preserved
+	for _, e := range res.File.Entries {
+		switch e.Key {
+		case "APP_ENV":
+			if e.Value != "production" {
+				t.Errorf("expected 'production', got %q", e.Value)
+			}
+		case "DB_HOST":
+			if e.Value != "localhost" {
+				t.Errorf("expected 'localhost', got %q", e.Value)
+			}
+		case "LOG_LEVEL":
+			if e.Value != "info" {
+				t.Errorf("expected 'info', got %q", e.Value)
+			}
+		}
+	}
+}
