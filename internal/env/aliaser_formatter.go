@@ -35,11 +35,18 @@ func FormatAliases(summaries []AliasSummary) string {
 	sb.WriteString(fmt.Sprintf("%-30s %-30s %s\n", "ALIAS", "SOURCE", "VALUE"))
 	sb.WriteString(strings.Repeat("-", 80) + "\n")
 	for _, s := range summaries {
-		v := s.Value
-		if len(v) > 16 {
-			v = v[:13] + "..."
-		}
-		sb.WriteString(fmt.Sprintf("%-30s %-30s %s\n", s.Alias, s.Source, v))
+		sb.WriteString(fmt.Sprintf("%-30s %-30s %s\n", s.Alias, s.Source, truncate(s.Value, 16)))
 	}
 	return sb.String()
+}
+
+// truncate shortens s to maxLen characters, appending "..." if truncated.
+func truncate(s string, maxLen int) string {
+	if len(s) <= maxLen {
+		return s
+	}
+	if maxLen <= 3 {
+		return s[:maxLen]
+	}
+	return s[:maxLen-3] + "..."
 }
