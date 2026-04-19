@@ -55,3 +55,10 @@ func TestFilter_NoOptions_ReturnsAll(t *testing.T) {
 		t.Errorf("expected 5, got %d", len(result))
 	}
 }
+
+func TestFilter_EmptyInput(t *testing.T) {
+	result := Filter([]parser.Entry{}, FilterOptions{Prefix: "DB_", NoEmpty: true})
+	if len(result) != 0 {
+		t.Errorf("expected 0, got %d", len(result))
+	}
+}
